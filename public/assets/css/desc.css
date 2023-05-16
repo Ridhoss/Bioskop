@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+body, input, button {
+    font-family: "Poppins", sans-serif;
+}
+
+/* main */
+
+.main-desc{
+    width: 100%;
+    display: flex;
+}
+
+.main-desc img{
+    width: 300px;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.desc {
+    margin-top: 30px;
+    margin-left: 40px;
+    width: 900px;
+}
+
+.desc > h1{
+    font-size: 40px;
+    font-weight: 800;
+    transition: 0.5s;
+    margin-bottom: 18px;
+}
+
+.desc h2 {
+    font-size: 18px;
+    margin-top: 5px;
+    color: #6e6e6e;
+}
+
+.desc > p{
+    margin-top: 30px;
+}
+
+.desc > h1:hover{
+    color: #ff842b;
+}
+
+
+body::-webkit-scrollbar{
+    display: none;
+}
+
+        /* radio */
+
+        .radio {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 10px 30px;
+            position: relative;
+            padding-left: 35px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            padding-right: 10px;
+            cursor: pointer;
+            color: #000;
+            transition: 0.5s;
+            border: 2px solid #414141;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 2px 2px 2px #000;
+            height: 90px;
+            width: 40%;
+        }
+
+        .radio h1{
+            font-size: 20px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .radio:hover {
+            color: #7a7a7a;
+        }
+
+        .radio input[type="radio"]{
+            display: none;
+        }
+
+        .radio span{
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid #414141;
+            display: block;
+            position: absolute;
+            left: 5px;
+            top: 11.3px;
+
+        }
+
+        .radio span:after{
+            content: "";
+            height: 8px;
+            width: 8px;
+            background-color: #414141;
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: 0.2s ease-in-out 0s;
+
+        }
+
+        .radio input[type="radio"]:checked ~ span:after{
+            transform: translate(-50%, -50%) scale(1.5);
+        }
+
+        .pnl {
+            background-color: #dddddd;
+            width: 650px;
+            height: 100%;
+            margin-top: 40px;
+            border-radius: 20px;
+            border: 2px outset #414141;
+            box-shadow: 2px 2px 3px #000;
+            flex-wrap: wrap;
+        }
+        
+        .pnl > h1 {
+            font-size: 30px;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
