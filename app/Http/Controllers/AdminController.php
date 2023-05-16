@@ -102,10 +102,10 @@ class AdminController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|unique:films',
-            'genre' => 'required',
-            'durasi' => 'required',
-            'deskripsi' => 'required',
+            'nama' => 'required|unique:films|regex:/^[a-zA-z0-9\s]*$/',
+            'genre' => 'required|regex:/^[a-zA-z\s]*$/',
+            'durasi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -144,10 +144,10 @@ class AdminController extends Controller
     public function EditFilm(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|unique:films',
-            'genre' => 'required',
-            'durasi' => 'required',
-            'deskripsi' => 'required',
+            'nama' => 'required|unique:films|regex:/^[a-zA-z0-9\s]*$/',
+            'genre' => 'required|regex:/^[a-zA-z\s]*$/',
+            'durasi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
             'fotobaru' => 'image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -275,9 +275,9 @@ class AdminController extends Controller
     public function AddNews(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul' => 'required',
-            'rilis' => 'required',
-            'deskripsi' => 'required',
+            'judul' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'rilis' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -315,9 +315,9 @@ class AdminController extends Controller
     public function EditNews(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul' => 'required',
-            'rilis' => 'required',
-            'deskripsi' => 'required',
+            'judul' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'rilis' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -387,7 +387,7 @@ class AdminController extends Controller
     public function AddTeater(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'nama' => 'required|regex:/^[a-zA-z0-9\s]*$/',
             'harga' => 'required|numeric',
         ]);
 
@@ -419,7 +419,7 @@ class AdminController extends Controller
     public function EditTeater(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'nama' => 'required|regex:/^[a-zA-z0-9\s]*$/',
             'harga' => 'required|numeric',
         ]);
 
@@ -554,9 +554,9 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[a-zA-z\s]*$/',
             'password' => 'required',
-            'nama' => 'required',
-            'email' => 'required',
-            'no' => 'required',
+            'nama' => 'required|regex:/^[a-zA-z\s]*$/',
+            'email' => 'required|email:dns',
+            'no' => 'required|numeric',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -616,9 +616,9 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[a-zA-z\s]*$/',
             'password' => 'required',
-            'nama' => 'required',
-            'email' => 'required',
-            'no' => 'required',
+            'nama' => 'required|regex:/^[a-zA-z\s]*$/',
+            'email' => 'required|email:dns',
+            'no' => 'required|numeric',
             'fotobaru' => 'image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -700,9 +700,9 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[a-zA-z\s]*$/',
             'password' => 'required|min:5',
-            'nama' => 'required',
-            'email' => 'required',
-            'no' => 'required',
+            'nama' => 'required|regex:/^[a-zA-z\s]*$/',
+            'email' => 'required|email:dns',
+            'no' => 'required|numeric',
             'foto' => 'image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -748,9 +748,9 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'username' => 'required|regex:/^[a-zA-z\s]*$/',
             'password' => 'required|min:5',
-            'nama' => 'required',
-            'email' => 'required',
-            'no' => 'required',
+            'nama' => 'required|regex:/^[a-zA-z\s]*$/',
+            'email' => 'required|email:dns',
+            'no' => 'required|numeric',
             'fotobaru' => 'image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
@@ -834,7 +834,7 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'no' => 'required',
-            'teater' => 'required',
+            'teater' => 'required|regex:/^[a-zA-z0-9\s]*$/',
         ]);
 
         if ($validator->fails()) {
@@ -855,7 +855,7 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'no' => 'required',
-            'teater' => 'required',
+            'teater' => 'required|regex:/^[a-zA-z0-9\s]*$/',
         ]);
 
         if ($validator->fails()) {
@@ -910,7 +910,7 @@ class AdminController extends Controller
     public function AddMetode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|unique:metodes',
+            'nama' => 'required|unique:metodes|regex:/^[a-zA-z\s]*$/',
         ]);
 
         if ($validator->fails()) {
@@ -929,7 +929,7 @@ class AdminController extends Controller
     public function EditMetode(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|unique:metodes',
+            'nama' => 'required|unique:metodes|regex:/^[a-zA-z\s]*$/',
         ]);
 
         if ($validator->fails()) {
@@ -970,7 +970,7 @@ class AdminController extends Controller
 
 
     // TRANSAKSI
-
+    
     // ORDER
 
     // Ke halaman order
