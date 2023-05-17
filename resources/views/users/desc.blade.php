@@ -14,6 +14,14 @@
             font-weight: 600;
             color: #6e6e6e;
         }
+
+        .desc > h1{
+            text-transform: uppercase;
+        }
+
+        .desc > p {
+            font-family: 'Comfortaa', cursive;
+        }
     </style>
 @endsection
 

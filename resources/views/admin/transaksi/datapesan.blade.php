@@ -34,9 +34,9 @@
         <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="printin"><i
                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
-    
+
     {{-- Page Row --}}
-    
+
     <div class="row" id="row">
         <table id="myTable" class="display">
             <thead>
@@ -49,7 +49,8 @@
                     <th>Teater</th>
                     <th>Broadcast Date</th>
                     <th>Order quantity</th>
-                    <th>Action</th>
+                    <th>Total Price</th>
+                    <th id="act">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,19 +58,21 @@
                     $no = 1;
                 @endphp
                 @foreach ($pesan as $f)
-                <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $f->no_order }}</td>
-                    <td>{{ $f->username }}</td>
-                    <td>{{ $f->film }}</td>
-                    <td>{{ $f->start }}</td>
-                    <td>{{ $f->nama }}</td>
-                    <td>{{ $f->jadwal_tgl }}</td>
-                    <td>{{ $f->jml_kursi }}</td>
-                    <td>
-                       
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ $no++ }}</td>
+                        <td>{{ $f->no_order }}</td>
+                        <td>{{ $f->username }}</td>
+                        <td>{{ $f->film }}</td>
+                        <td>{{ $f->start }}</td>
+                        <td>{{ $f->nama }}</td>
+                        <td>{{ $f->jadwal_tgl }}</td>
+                        <td>{{ $f->jml_kursi }}</td>
+                        <td>Rp. {{ number_format($f->total, 0, ',', '.') }}</td>
+                        <td id="act">
+                            <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal"
+                                data-bs-target="#hapus{{ $f->id }}">Delete</button>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

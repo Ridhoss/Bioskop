@@ -15,6 +15,12 @@
     <link href="assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/904a972631.js" crossorigin="anonymous"></script>
 
+    {{-- font --}}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500&display=swap" rel="stylesheet">
+
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -40,6 +46,10 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 
     <style>
+        * {
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
         table th,td,tr{
             text-align: center;
         }

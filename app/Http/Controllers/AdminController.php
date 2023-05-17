@@ -977,11 +977,13 @@ class AdminController extends Controller
     public function Order()
     {
 
-        $pesan = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi')
+        $pesan = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi','transaksis.total')
             ->join('users', 'users.id', '=', 'pesans.id_user')
             ->join('films', 'films.id', '=', 'pesans.id_film')
             ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
-            ->join('teaters', 'teaters.id', '=', 'pesans.id_teater');
+            ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
+            ->join('transaksis','transaksis.no_order','=','pesans.no_order')
+            ->orderBy('pesans.created_at', 'desc');
 
         if (request('cari')) {
             $pesan->where('no_order', 'like', '%' . request('cari') . '%');
