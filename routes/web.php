@@ -235,3 +235,6 @@ Route::post('/statusDetailDash', [AdminController::class, 'StatusDetailDash']);
 Route::get('/transcation', [AdminController::class, 'Transaction'])->middleware('auth:admin');
 // delete teater
 Route::post('/hapustransaksi', [AdminController::class, 'HapusTransaksi']);
+
+// Laporan
+Route::post('/laporan', [AdminController::class, 'Laporan'])->middleware('auth:admin');

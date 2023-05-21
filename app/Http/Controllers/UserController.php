@@ -364,7 +364,7 @@ class UserController extends Controller
     // booking
     public function Booking(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'user' => 'required',
             'film' => 'required',
             'teater' => 'required',
@@ -374,8 +374,13 @@ class UserController extends Controller
             'kursi' => 'required',
             'total' => 'required',
             'metode' => 'required',
-            'telepon' => 'required'
+            'phone' => 'required|numeric'
         ]);
+
+        if ($validator->fails()) {
+            return redirect('/home')
+                ->withErrors($validator);
+        }
 
         $t = teater::find($request->teater);
 
@@ -395,7 +400,7 @@ class UserController extends Controller
             'tgl_trans' => date('Ymd'),
             'metode' => $request->metode,
             'total' => $request->total,
-            'no_hp' => $request->telepon,
+            'no_hp' => $request->phone,
         ]);
 
         foreach ($request->kursi as $kursi) {

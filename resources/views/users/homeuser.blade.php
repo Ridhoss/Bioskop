@@ -2,6 +2,13 @@
 
 @section('container')
 
+    @error('phone')
+        <div class="alert alert-danger alert-dismissible fade show w-50" role="alert">
+            <strong>Booking Failed!</strong> {{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @enderror
+
     <div class="movie" id="mov">
         <div class="glider-contain" id="glide">
             <div class="glider p-3" id="in-glide">
@@ -43,7 +50,8 @@
                         <div class="card-body">
                             <h5 class="card-title mb-3">{{ $n->judul }}</h5>
                             <p class="card-text">{{ $n->deskripsi }}</p>
-                            <p class="card-text"><small class="text-body-secondary">Uploaded : {{ $n->data_rilis }}</small></p>
+                            <p class="card-text"><small class="text-body-secondary">Uploaded : {{ $n->data_rilis }}</small>
+                            </p>
                         </div>
                     </div>
                 </div>

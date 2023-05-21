@@ -264,7 +264,7 @@
                     <p>Enter your phone number</p>
                         <div class="input-name">
                             <i class="fa-solid fa-phone"></i>
-                            <input type="text" name="telepon" placeholder="Phone Number" required>
+                            <input type="text" name="phone" placeholder="Phone Number" required>
                         </div>
                 
                     <button class="btn btn-warning my-4 btn-md" type="submit">Go Book</button>

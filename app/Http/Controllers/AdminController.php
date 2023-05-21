@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use SebastianBergmann\Type\VoidType;
@@ -103,15 +104,15 @@ class AdminController extends Controller
 
         $validator = Validator::make($request->all(), [
             'nama' => 'required|unique:films|regex:/^[a-zA-z0-9\s]*$/',
-            'genre' => 'required|regex:/^[a-zA-z\s]*$/',
+            'genre' => 'required',
             'durasi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
-            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'deskripsi' => 'required',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($validator->fails()) {
             return redirect('/film')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // upload gambar
@@ -145,15 +146,15 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|unique:films|regex:/^[a-zA-z0-9\s]*$/',
-            'genre' => 'required|regex:/^[a-zA-z\s]*$/',
+            'genre' => 'required',
             'durasi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
-            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'deskripsi' => 'required',
             'fotobaru' => 'image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($validator->fails()) {
             return redirect('/film')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         if ($request->hasFile('fotobaru')) {
@@ -275,15 +276,15 @@ class AdminController extends Controller
     public function AddNews(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul' => 'required|regex:/^[a-zA-z0-9\s]*$/',
-            'rilis' => 'required|regex:/^[a-zA-z0-9\s]*$/',
-            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'judul' => 'required',
+            'rilis' => 'required',
+            'deskripsi' => 'required',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($validator->fails()) {
             return redirect('/news')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // upload gambar
@@ -315,15 +316,15 @@ class AdminController extends Controller
     public function EditNews(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul' => 'required|regex:/^[a-zA-z0-9\s]*$/',
-            'rilis' => 'required|regex:/^[a-zA-z0-9\s]*$/',
-            'deskripsi' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'judul' => 'required',
+            'rilis' => 'required',
+            'deskripsi' => 'required',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($validator->fails()) {
             return redirect('/news')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         if ($request->hasFile('foto')) {
@@ -393,7 +394,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/teater')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         teater::create([
@@ -425,7 +426,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/teater')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // update produk tanpa gambar
@@ -475,7 +476,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/schedule')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         jadwal::create([
@@ -509,7 +510,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/schedule')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         $data = jadwal::find($request->id);
@@ -562,7 +563,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/admindata')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // hashing password
@@ -595,7 +596,6 @@ class AdminController extends Controller
                 'foto' => $foto->hashName(),
                 'no' => $request->no
             ]);
-
         } else {
             // tambah admin tanpa gambar
 
@@ -624,7 +624,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/admindata')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // hashing password
@@ -708,7 +708,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/userdata')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // hashing password
@@ -756,7 +756,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/userdata')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         // hashing password
@@ -823,7 +823,9 @@ class AdminController extends Controller
         return view('admin.data.datakursi', [
             'title' => 'Data Kursi | Admin',
             'bio' => Auth::user(),
-            'kursi' => kursi::all(),
+            'kursi' => kursi::select('*')
+                ->orderBy('teater')
+                ->get(),
             'teater' => teater::select('*')
                 ->where('status', '=', '1')
                 ->get()
@@ -839,7 +841,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/seatdata')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         kursi::create([
@@ -860,7 +862,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/seatdata')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         $data = kursi::find($request->id);
@@ -915,7 +917,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/Metode')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         metode::create([
@@ -934,7 +936,7 @@ class AdminController extends Controller
 
         if ($validator->fails()) {
             return redirect('/Metode')
-                        ->withErrors($validator);
+                ->withErrors($validator);
         }
 
         $data = metode::find($request->id);
@@ -970,19 +972,19 @@ class AdminController extends Controller
 
 
     // TRANSAKSI
-    
+
     // ORDER
 
     // Ke halaman order
     public function Order()
     {
 
-        $pesan = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi','transaksis.total')
+        $pesan = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi', 'transaksis.total')
             ->join('users', 'users.id', '=', 'pesans.id_user')
             ->join('films', 'films.id', '=', 'pesans.id_film')
             ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
             ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
-            ->join('transaksis','transaksis.no_order','=','pesans.no_order')
+            ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
             ->orderBy('pesans.created_at', 'desc');
 
         if (request('cari')) {
@@ -1071,7 +1073,7 @@ class AdminController extends Controller
                 ->get()
         ]);
     }
-    // // Hapus transaksi
+    // Hapus transaksi
     public function HapusTransaksi(Request $request)
     {
         // menghapus schedule
@@ -1079,5 +1081,57 @@ class AdminController extends Controller
         $film->delete();
 
         return redirect()->intended('/transcation')->with('berhasil', 'Data has been succesfully deleted');
+    }
+
+
+    // Laporan
+
+    public function Laporan(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'Start' => 'required',
+            'End' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $data = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi', 'transaksis.total')
+                ->join('users', 'users.id', '=', 'pesans.id_user')
+                ->join('films', 'films.id', '=', 'pesans.id_film')
+                ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
+                ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
+                ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
+                ->orderBy('pesans.created_at', 'asc');
+
+            $st = pesan::select('pesans.jadwal_tgl')
+                ->orderBy('jadwal_tgl', 'asc')
+                ->first();
+
+            $en = pesan::select('pesans.jadwal_tgl')
+                ->orderBy('jadwal_tgl', 'desc')
+                ->first();
+
+            $start = $st->jadwal_tgl;
+            $end = $en->jadwal_tgl;
+
+        } else {
+
+            $start = $request->Start;
+            $end = $request->End;
+
+            $data = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi', 'transaksis.total')
+                ->join('users', 'users.id', '=', 'pesans.id_user')
+                ->join('films', 'films.id', '=', 'pesans.id_film')
+                ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
+                ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
+                ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
+                ->orderBy('pesans.created_at', 'asc')
+                ->whereBetween('pesans.jadwal_tgl', [$start, $end]);
+        }
+
+        return view('admin.transaksi.laporan', [
+            'data' => $data->get(),
+            'start' => $start,
+            'end' => $end
+        ]);
     }
 }

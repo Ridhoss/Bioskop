@@ -31,8 +31,10 @@
         </form> --}}
 
         <h1 class="h3 mb-0 text-gray-800">Order Data</h1>
-        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="printin"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+        {{-- <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="printin"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
+        <a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal"
+            data-bs-target="#laporan" id="gen"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
     </div>
 
     {{-- Page Row --}}
@@ -125,6 +127,38 @@
         </table> --}}
     </div>
 
+    <!-- Modal Laporan-->
+    <div class="modal fade" id="laporan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Print Report</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close2"></button>
+                </div>
+                <form action="/laporan" method="post">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="row">
+                            <label class="mb-2">Start Date</label>
+                            <input type="date" class="form-control" name="Start" id="input">
+                        </div>
+                        <div class="row mt-3">
+                            <label class="mb-2">End Date</label>
+                            <input type="date" class="form-control" name="End" id="input2">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            id="close">Close</button>
+                        <button type="submit" class="btn btn-primary">Print</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     {{-- modal hapus --}}
 
@@ -157,6 +191,29 @@
         printBtn.addEventListener('click', function() {
             print();
         })
+    </script>
+
+    <script>
+        const dateInput = document.getElementById("input");
+        const dateInput2 = document.getElementById("input2");
+        const closeButton = document.getElementById("close");
+        const closeButton2 = document.getElementById("close2");
+        const gen = document.getElementById("gen");
+
+        closeButton.addEventListener("click", function() {
+            dateInput.value = ""; // Menghapus Value input date
+            dateInput2.value = "";
+        });
+
+        closeButton2.addEventListener("click", function() {
+            dateInput.value = ""; // Menghapus Value input date
+            dateInput2.value = "";
+        });
+
+        gen.addEventListener("click", function() {
+            dateInput.value = ""; // Menghapus Value input date
+            dateInput2.value = "";
+        });
     </script>
 
     <script>
