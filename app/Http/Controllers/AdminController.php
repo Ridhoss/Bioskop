@@ -997,7 +997,8 @@ class AdminController extends Controller
             'bio' => Auth::user(),
             'pesan' => $pesan->get(),
             'count' => pesan::select('*')
-                ->count()
+                ->count(),
+            'user' => User::all()
         ]);
     }
     // // Hapus order
@@ -1093,7 +1094,12 @@ class AdminController extends Controller
             'End' => 'required',
         ]);
 
-        if ($validator->fails()) {
+        $validatorname = Validator::make($request->all(), [
+            'username' => 'required'
+        ]);
+
+        if ($validator->fails() && $validatorname->fails()) {
+
             $data = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi', 'transaksis.total')
                 ->join('users', 'users.id', '=', 'pesans.id_user')
                 ->join('films', 'films.id', '=', 'pesans.id_film')
@@ -1112,8 +1118,7 @@ class AdminController extends Controller
 
             $start = $st->jadwal_tgl;
             $end = $en->jadwal_tgl;
-
-        } else {
+        } elseif ($validatorname->fails()) {
 
             $start = $request->Start;
             $end = $request->End;
@@ -1126,6 +1131,50 @@ class AdminController extends Controller
                 ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
                 ->orderBy('pesans.created_at', 'asc')
                 ->whereBetween('pesans.jadwal_tgl', [$start, $end]);
+
+        } elseif ($validator->fails()) {
+
+            $username = $request->username;
+
+            $data = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi', 'transaksis.total')
+                ->join('users', 'users.id', '=', 'pesans.id_user')
+                ->join('films', 'films.id', '=', 'pesans.id_film')
+                ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
+                ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
+                ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
+                ->orderBy('pesans.created_at', 'asc')
+                ->where('users.username', '=', $username);
+
+            $st = pesan::select('pesans.jadwal_tgl', 'users.username')
+                ->orderBy('jadwal_tgl', 'asc')
+                ->join('users', 'users.id', '=', 'pesans.id_user')
+                ->where('users.username', '=', $username)
+                ->first();
+
+            $en = pesan::select('pesans.jadwal_tgl', 'users.username')
+                ->orderBy('jadwal_tgl', 'desc')
+                ->join('users', 'users.id', '=', 'pesans.id_user')
+                ->where('users.username', '=', $username)
+                ->first();
+
+            $start = $st->jadwal_tgl;
+            $end = $en->jadwal_tgl;
+        }else {
+            
+            $username = $request->username;
+            $start = $request->Start;
+            $end = $request->End;
+
+            $data = pesan::select('pesans.id', 'pesans.no_order', 'pesans.jadwal_tgl', 'users.username', 'films.nama AS film', 'jadwals.start', 'teaters.nama', 'pesans.jml_kursi', 'transaksis.total')
+                ->join('users', 'users.id', '=', 'pesans.id_user')
+                ->join('films', 'films.id', '=', 'pesans.id_film')
+                ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
+                ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
+                ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
+                ->orderBy('pesans.created_at', 'asc')
+                ->where('users.username', '=', $username)
+                ->whereBetween('pesans.jadwal_tgl', [$start, $end]);
+
         }
 
         return view('admin.transaksi.laporan', [

@@ -148,6 +148,16 @@
                             <label class="mb-2">End Date</label>
                             <input type="date" class="form-control" name="End" id="input2">
                         </div>
+                        <div class="row mt-3">
+                            <label class="mb-2">Username</label>
+                            {{-- <input type="text" class="form-control" name="username" id="username" placeholder="Search By Username"> --}}
+                            <select name="username" id="" class="form-select">
+                                <option value="">-- Print By User --</option>
+                                @foreach ($user as $us)
+                                    <option value="{{ $us->username }}">{{ $us->username }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
