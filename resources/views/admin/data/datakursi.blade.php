@@ -8,7 +8,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    @error('no')
+    @error('no_kursi')
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Data Failed!</strong> {{ $message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -85,8 +85,8 @@
                     @csrf
                     <div class="modal-body p-4">
                         <div class="row">
-                            <label class="mb-2">Seat Number | Format : X1</label>
-                            <input type="text" class="form-control" name="no" placeholder="Seat Number" required>
+                            <label class="mb-2">Enter the number of seats</label>
+                            <input type="text" class="form-control" name="no_kursi" placeholder="Number of seats" required>
                         </div>
                         <div class="row mt-3">
                             <label class="mb-2">Teater</label>
@@ -124,7 +124,7 @@
                         <div class="modal-body p-4">
                             <div class="row">
                                 <label class="mb-2">Seat Number | Format : X1</label>
-                                <input type="text" class="form-control" name="no" placeholder="Seat Number"
+                                <input type="text" class="form-control" name="no_kursi" placeholder="Seat Number"
                                     value="{{ $k->no_kursi }}">
                             </div>
                             <div class="row mt-3">
@@ -152,13 +152,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Seat : {{ $f->no_kursi }}
-                            {{ $f->teater }}</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Remove all seats at : {{ $f->teater }}</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/hapusSeat" method="post" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $f->id }}">
+                        <input type="hidden" name="teater" value="{{ $f->teater }}">
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

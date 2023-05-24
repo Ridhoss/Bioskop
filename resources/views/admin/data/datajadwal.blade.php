@@ -8,13 +8,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    @error('mulai')
+    @error('start')
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Data Failed!</strong> {{ $message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @enderror
-    @error('selesai')
+    @error('end')
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <strong>Data Failed!</strong> {{ $message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -95,11 +95,11 @@
                     <div class="modal-body p-4">
                         <div class="row">
                             <label class="mb-2">Start Time</label>
-                            <input type="text" class="form-control" name="mulai" placeholder="Start Time Schedule" required>
+                            <input type="text" class="form-control" name="start" placeholder="Start Time Schedule" required>
                         </div>
                         <div class="row mt-3">
                             <label class="mb-2">End Time</label>
-                            <input type="text" class="form-control" name="selesai" placeholder="End Time Schedule" required>
+                            <input type="text" class="form-control" name="end" placeholder="End Time Schedule" required>
                         </div>
                         <div class="row mt-3">
                             <label class="mb-2">Teater</label>
@@ -138,12 +138,12 @@
                         <div class="modal-body p-4">
                             <div class="row">
                                 <label class="mb-2">Start Time</label>
-                                <input type="text" class="form-control" name="mulai"
+                                <input type="text" class="form-control" name="start"
                                     placeholder="Start Time Schedule" value="{{ $t->start }}">
                             </div>
                             <div class="row mt-3">
                                 <label class="mb-2">End Time</label>
-                                <input type="text" class="form-control" name="selesai"
+                                <input type="text" class="form-control" name="end"
                                     placeholder="End Time Schedule" value="{{ $t->end }}">
                             </div>
                             <div class="row mt-3">

@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use SebastianBergmann\Type\VoidType;
 
 class AdminController extends Controller
@@ -276,7 +277,7 @@ class AdminController extends Controller
     public function AddNews(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul' => 'required',
+            'judul' => 'required|unique:news',
             'rilis' => 'required',
             'deskripsi' => 'required',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
@@ -316,7 +317,7 @@ class AdminController extends Controller
     public function EditNews(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'judul' => 'required',
+            'judul' => 'required|unique:news',
             'rilis' => 'required',
             'deskripsi' => 'required',
             'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048'
@@ -388,7 +389,7 @@ class AdminController extends Controller
     public function AddTeater(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'nama' => 'required|regex:/^[a-zA-z0-9\s]*$/|unique:teaters',
             'harga' => 'required|numeric',
         ]);
 
@@ -420,7 +421,7 @@ class AdminController extends Controller
     public function EditTeater(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'nama' => 'required|regex:/^[a-zA-z0-9\s]*$/|unique:teaters',
             'harga' => 'required|numeric',
         ]);
 
@@ -460,18 +461,25 @@ class AdminController extends Controller
             'title' => 'Data Jadwal | Admin',
             'schedule' => jadwal::all(),
             'bio' => Auth::user(),
-            'teater' => teater::select('*')
-                ->where('status', '=', '1')
-                ->get()
+            'teater' => teater::all()
         ]);
     }
     // tambah jadwal
     public function AddSchedule(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'mulai' => 'required',
-            'selesai' => 'required',
-            'teater' => 'required'
+            'start' => 'required',
+            'end' => 'required',
+            'teater' => 'required',
+            'start' => [
+                'required',
+                Rule::unique('jadwals')->where(function ($query) use ($request) {
+                    return $query->where('start', $request->start)
+                        ->where('end', $request->end)
+                        ->where('teater', $request->teater);
+                })
+            ]
+
         ]);
 
         if ($validator->fails()) {
@@ -480,8 +488,8 @@ class AdminController extends Controller
         }
 
         jadwal::create([
-            'start' => $request->mulai,
-            'end' => $request->selesai,
+            'start' => $request->start,
+            'end' => $request->end,
             'teater' => $request->teater,
             'status' => '0'
         ]);
@@ -503,9 +511,17 @@ class AdminController extends Controller
     public function EditSchedule(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'mulai' => 'required',
-            'selesai' => 'required',
-            'teater' => 'required'
+            'start' => 'required',
+            'end' => 'required',
+            'teater' => 'required',
+            'start' => [
+                'required',
+                Rule::unique('jadwals')->where(function ($query) use ($request) {
+                    return $query->where('start', $request->start)
+                        ->where('end', $request->end)
+                        ->where('teater', $request->teater);
+                })
+            ]
         ]);
 
         if ($validator->fails()) {
@@ -516,8 +532,8 @@ class AdminController extends Controller
         $data = jadwal::find($request->id);
 
         $data->update([
-            'start' => $request->mulai,
-            'end' => $request->selesai,
+            'start' => $request->start,
+            'end' => $request->end,
             'teater' => $request->teater
         ]);
 
@@ -553,7 +569,7 @@ class AdminController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|regex:/^[a-zA-z\s]*$/',
+            'username' => 'required|regex:/^[a-zA-z\s]*$/|unique:admins',
             'password' => 'required',
             'nama' => 'required|regex:/^[a-zA-z\s]*$/',
             'email' => 'required|email:dns',
@@ -614,7 +630,7 @@ class AdminController extends Controller
     public function EditAdmin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|regex:/^[a-zA-z\s]*$/',
+            'username' => 'required|regex:/^[a-zA-z\s]*$/|unique:admins',
             'password' => 'required',
             'nama' => 'required|regex:/^[a-zA-z\s]*$/',
             'email' => 'required|email:dns',
@@ -698,7 +714,7 @@ class AdminController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|regex:/^[a-zA-z\s]*$/',
+            'username' => 'required|regex:/^[a-zA-z\s]*$/|unique:users',
             'password' => 'required|min:5',
             'nama' => 'required|regex:/^[a-zA-z\s]*$/',
             'email' => 'required|email:dns',
@@ -746,7 +762,7 @@ class AdminController extends Controller
     public function EditUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|regex:/^[a-zA-z\s]*$/',
+            'username' => 'required|regex:/^[a-zA-z\s]*$/|unique:users',
             'password' => 'required|min:5',
             'nama' => 'required|regex:/^[a-zA-z\s]*$/',
             'email' => 'required|email:dns',
@@ -835,8 +851,15 @@ class AdminController extends Controller
     public function AddSeat(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'no' => 'required',
+            'no_kursi' => 'required',
             'teater' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'no_kursi' => [
+                'required',
+                Rule::unique('kursis')->where(function ($query) use ($request) {
+                    return $query->where('no_kursi', $request->no_kursi)
+                        ->where('teater', $request->teater);
+                })
+            ]
         ]);
 
         if ($validator->fails()) {
@@ -844,11 +867,43 @@ class AdminController extends Controller
                 ->withErrors($validator);
         }
 
-        kursi::create([
-            'no_kursi' => $request->no,
-            'teater' => $request->teater,
-            'status' => '1'
-        ]);
+        $seats = [];
+        $huruf = 'A';
+        $angka = 1;
+        $jml = $request->no_kursi;
+
+        for ($i = 1; $i <= $jml; $i++) {
+            $seat = $huruf . $angka;
+            $seats[] = $seat;
+
+            // Periksa jika angka sudah mencapai 5, ganti huruf dengan huruf berikutnya
+            if ($angka >= 5) {
+                $huruf++;
+                $angka = 1;
+            } else {
+                $angka++;
+            }
+        }
+
+        $trt = teater::select('*')
+            ->where('nama', '=', $request->teater)
+            ->get();
+
+        foreach ($trt as $t) {
+            $ttr = teater::find($t->id);
+
+            $ttr->update([
+                'status' => '0'
+            ]);
+        }
+
+        foreach ($seats as $seat) {
+            kursi::create([
+                'no_kursi' => $seat,
+                'teater' => $request->teater,
+                'status' => '1'
+            ]);
+        }
 
         return redirect()->intended('/seatdata')->with('berhasil', 'Data has been successfully uploaded');
     }
@@ -856,8 +911,15 @@ class AdminController extends Controller
     public function EditSeat(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'no' => 'required',
+            'no_kursi' => 'required',
             'teater' => 'required|regex:/^[a-zA-z0-9\s]*$/',
+            'no_kursi' => [
+                'required',
+                Rule::unique('kursis')->where(function ($query) use ($request) {
+                    return $query->where('no_kursi', $request->no_kursi)
+                        ->where('teater', $request->teater);
+                })
+            ]
         ]);
 
         if ($validator->fails()) {
@@ -868,7 +930,7 @@ class AdminController extends Controller
         $data = kursi::find($request->id);
 
         $data->update([
-            'no_kursi' => $request->no,
+            'no_kursi' => $request->no_kursi,
             'teater' => $request->teater,
         ]);
 
@@ -885,12 +947,31 @@ class AdminController extends Controller
 
         return redirect()->intended('/seatdata');
     }
-    // Hapus Schedule
+    // Hapus kursi
     public function HapusSeat(Request $request)
     {
         // menghapus schedule
-        $film = kursi::find($request->id);
-        $film->delete();
+
+        $kursi = kursi::select('*')
+            ->where('teater', '=', $request->teater)
+            ->get();
+
+        $trt = teater::select('*')
+            ->where('nama', '=', $request->teater)
+            ->get();
+
+        foreach ($trt as $t) {
+            $ttr = teater::find($t->id);
+
+            $ttr->update([
+                'status' => '1'
+            ]);
+        }
+
+        foreach ($kursi as $kur) {
+            $krs = kursi::find($kur->id);
+            $krs->delete();
+        }
 
         return redirect()->intended('/seatdata')->with('berhasil', 'Data has been succesfully deleted');
     }
@@ -1131,7 +1212,6 @@ class AdminController extends Controller
                 ->join('transaksis', 'transaksis.no_order', '=', 'pesans.no_order')
                 ->orderBy('pesans.created_at', 'asc')
                 ->whereBetween('pesans.jadwal_tgl', [$start, $end]);
-
         } elseif ($validator->fails()) {
 
             $username = $request->username;
@@ -1159,8 +1239,8 @@ class AdminController extends Controller
 
             $start = $st->jadwal_tgl;
             $end = $en->jadwal_tgl;
-        }else {
-            
+        } else {
+
             $username = $request->username;
             $start = $request->Start;
             $end = $request->End;
@@ -1174,7 +1254,6 @@ class AdminController extends Controller
                 ->orderBy('pesans.created_at', 'asc')
                 ->where('users.username', '=', $username)
                 ->whereBetween('pesans.jadwal_tgl', [$start, $end]);
-
         }
 
         return view('admin.transaksi.laporan', [
