@@ -23,8 +23,13 @@
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Seat Data</h1>
-        <button type="button" class="btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#tambah"><i
+
+        <div class="btn-clm">
+            <button type="button" class="btn btn-sm btn-danger shadow-sm me-4" data-bs-toggle="modal" data-bs-target="#hapus"><i
+                class="fas fa-trash fa-sm text-white-50"></i> Delete Data</button>
+            <button type="button" class="btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#tambah"><i
                 class="fas fa-database fa-sm text-white-50"></i> Add Data</button>
+        </div>
     </div>
 
     {{-- page row --}}
@@ -35,7 +40,7 @@
                 <th>Seat Number</th>
                 <th>Teater</th>
                 <th>Status</th>
-                <th colspan="2">Action</th>
+                <th>Action</th>
             </thead>
             @php
                 $no = 1;
@@ -61,10 +66,6 @@
                     <td>
                         <button class="btn btn-success btn-sm" type="button" data-bs-toggle="modal"
                             data-bs-target="#edit{{ $f->id }}">Edit</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger btn-sm" type="button" data-bs-toggle="modal"
-                            data-bs-target="#hapus{{ $f->id }}">Delete</button>
                     </td>
                 </tbody>
             @endforeach
@@ -147,18 +148,26 @@
     {{-- Modal Hapus --}}
 
     @foreach ($kursi as $f)
-        <div class="modal fade" id="hapus{{ $f->id }}" data-bs-backdrop="static" data-bs-keyboard="false"
+        <div class="modal fade" id="hapus" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Remove all seats at : {{ $f->teater }}</h1>
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Remove all seats</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="/hapusSeat" method="post" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="teater" value="{{ $f->teater }}">
-
+                        <div class="modal-body p-4">
+                            <div class="row">
+                                <label class="mb-2">Teater</label>
+                                <select name="teater" class="form-select" required>
+                                    @foreach ($teater2 as $t)
+                                        <option value="{{ $t->nama }}">{{ $t->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger">Delete</button>

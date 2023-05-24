@@ -844,7 +844,10 @@ class AdminController extends Controller
                 ->get(),
             'teater' => teater::select('*')
                 ->where('status', '=', '1')
-                ->get()
+                ->get(),
+            'teater2' => teater::select('*')
+            ->where('status', '=', '0')
+            ->get()
         ]);
     }
     // Add Seat
