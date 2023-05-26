@@ -50,6 +50,7 @@ class AdminController extends Controller
                 ->join('films', 'films.id', '=', 'pesans.id_film')
                 ->join('jadwals', 'jadwals.id', '=', 'pesans.id_jadwal')
                 ->join('teaters', 'teaters.id', '=', 'pesans.id_teater')
+                ->orderBy('pesans.created_at', 'desc')
                 ->get(),
             'kursi' => detailpesan::select('detailpesans.id', 'detailpesans.idno_kursi', 'detailpesans.no_order', 'kursis.no_kursi', 'detailpesans.harga', 'detailpesans.status')
                 ->join('kursis', 'kursis.id', '=', 'detailpesans.id_kursi')
@@ -95,7 +96,9 @@ class AdminController extends Controller
         return view('admin.data.datafilm', [
             'title' => 'Data Film | Admin',
             'genre' => genre::all(),
-            'film' => film::all(),
+            'film' => film::select('*')
+                        ->orderBy('created_at', 'desc')
+                        ->get(),
             'bio' => Auth::user()
         ]);
     }
@@ -1107,6 +1110,7 @@ class AdminController extends Controller
             'bio' => Auth::user(),
             'pesan' => detailpesan::select('detailpesans.id', 'detailpesans.idno_kursi', 'detailpesans.no_order', 'kursis.no_kursi', 'detailpesans.harga', 'detailpesans.status')
                 ->join('kursis', 'kursis.id', '=', 'detailpesans.id_kursi')
+                ->orderBy('detailpesans.created_at', 'desc')
                 ->get(),
         ]);
     }
@@ -1145,7 +1149,7 @@ class AdminController extends Controller
 
 
 
-    // DETAIL ORDER
+    // DETAIL TRANSAKSI
 
     // Ke halaman detail order
     public function Transaction()
@@ -1155,6 +1159,7 @@ class AdminController extends Controller
             'bio' => Auth::user(),
             'pesan' => transaksi::select('transaksis.id', 'transaksis.no_order', 'transaksis.tgl_trans', 'metodes.nama AS metode', 'transaksis.total', 'transaksis.no_hp')
                 ->join('metodes', 'metodes.id', '=', 'transaksis.metode')
+                ->orderBy('transaksis.tgl_trans', 'desc')
                 ->get()
         ]);
     }

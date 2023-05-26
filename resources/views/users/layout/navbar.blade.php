@@ -166,7 +166,7 @@
 
 </head>
 
-<body>
+<body class="overflow-x-hidden">
 
     <nav class="navbar navbar-expand-lg" data-bs-theme="dark" style="background-color: #2e2e2e">
         <div class="container-fluid">
