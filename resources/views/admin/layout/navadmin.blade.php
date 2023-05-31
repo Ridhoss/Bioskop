@@ -11,6 +11,8 @@
 
     <title>{{ $title }}</title>
 
+    <link rel="icon" href="assets/img/brand.png">
+
     <!-- Custom fonts for this template-->
     <link href="assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/904a972631.js" crossorigin="anonymous"></script>
@@ -70,7 +72,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: #77dd77;">
+        <ul class="navbar-nav sidebar sidebar-dark accordion bg-gradient-success" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard">
